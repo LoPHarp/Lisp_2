@@ -35,17 +35,40 @@ CL-USER> (list-set-union-3 '(1 2 3) '(2 3 4) '(nil t))
 (1 2 3 4 NIL T) ; порядок може відрізнятись
 ```
 
-## Лістинг функції <назва першої функції>
+## Лістинг функції remove-thirds
 ```lisp
-<Лістинг реалізації першої функції>
+CL-USER> (defun remove-thirds-aux (lst)
+  (if (cddr lst)
+      (cons (car lst) (cons (cadr lst) (remove-thirds-aux (cdddr lst))))
+      lst))
+
+(defun remove-thirds (lst)
+  (when (and (listp lst) (null (cdr (last lst)))) ;; Перевірка на пустий список та точкову пару.
+      (remove-thirds-aux lst)))
+REMOVE-THIRDS
 ```
 ### Тестові набори та утиліти
 ```lisp
-<Лістинг реалізації утилітних тестових функцій та тестових наборів першої
-функції>```
+CL-USER> (defun check-my-reverse (name input expected)
+  "Execute `my-reverse' on `input', compare result with `expected' and print comparison status"
+  (format t "~:[FAILED~;passed~] ~a~%"
+          (equal (remove-thirds input) expected)
+          name))
+
+(defun test-my-reverse ()
+  (check-my-reverse "test 1" '(1 2 3 4 5 6) '(1 2 4 5))
+  (check-my-reverse "test 2" '(1 `b (nil) `|logo| 42 `r 0) '(1 `b `|logo| 42 0))
+  (check-my-reverse "test 3" '(1 2) '(1 2))
+  )
+TEST-MY-REVERSE
+```
 ### Тестування
 ```lisp
-<Виклик і результат виконання тестів першої функції>
+CL-USER> (test-my-reverse)
+passed test 1
+passed test 2
+passed test 3
+NIL
 ```
 ## Лістинг функції <назва другої функції>
 ```lisp
