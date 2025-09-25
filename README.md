@@ -57,7 +57,7 @@ CL-USER> (defun check-my-reverse (name input expected)
 
 (defun test-my-reverse ()
   (check-my-reverse "test 1" '(1 2 3 4 5 6) '(1 2 4 5))
-  (check-my-reverse "test 2" '(1 `b (nil) `|logo| 42 `r 0) '(1 `b `|logo| 42 0))
+  (check-my-reverse "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0))
   (check-my-reverse "test 3" '(1 2) '(1 2))
   )
 TEST-MY-REVERSE
@@ -70,16 +70,44 @@ passed test 2
 passed test 3
 NIL
 ```
-## Лістинг функції <назва другої функції>
+## Лістинг функції list-set-union-3
 ```lisp
-<Лістинг реалізації другої функції>
+CL-USER> (defun list-set-union-3-aux (lst)
+  (cond
+    ((null lst) nil)
+    ((member (car lst) (cdr lst))
+     (list-set-union-3-aux (cdr lst)))
+    (t (cons (car lst) (list-set-union-3-aux (cdr lst))))))
+
+(defun list-set-union-3 (lst1 lst2 lst3)
+  (when (and (listp lst1) (null (cdr (last lst1)))
+             (listp lst2) (null (cdr (last lst2)))
+             (listp lst3) (null (cdr (last lst3))))
+    (list-set-union-3-aux (append lst1 lst2 lst3))))
+
+LIST-SET-UNION-3
 ```
 ### Тестові набори та утиліти
 ```lisp
-<Лістинг реалізації утилітних тестових функцій та тестових наборів другої
-функції>
+CL-USER> (defun check-my-reverse (name input1 input2 input3 expected)
+  "Execute `my-reverse' on `input', compare result with `expected' and print comparison status"
+  (format t "~:[FAILED~;passed~] ~a~%"
+          (equal (list-set-union-3 input1 input2 input3) expected)
+          name))
+
+(defun test-my-reverse ()
+  (check-my-reverse "test 1" '(1 2 3) '(2 3 4) '(4 5 6 7 8) '(1 2 3 4 5 6 7 8))
+  (check-my-reverse "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0) '('|logo| 1 1 1) '('B (NIL) '|logo| 'R 'B '|logo| 42 0 '|logo| 1))
+  (check-my-reverse "test 3" '(1 2) '(1 2) 'a nil)
+  )
+
+TEST-MY-REVERSE
 ```
 ### Тестування
 ```lisp
-<Виклик і результат виконання тестів другої функції>
+CL-USER> (test-my-reverse)
+passed test 1
+passed test 2
+passed test 3
+NIL
 ```
