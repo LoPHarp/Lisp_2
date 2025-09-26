@@ -43,7 +43,7 @@ CL-USER> (defun remove-thirds-aux (lst)
       lst))
 
 (defun remove-thirds (lst)
-  (when (and (listp lst) (null (cdr (last lst)))) ;; Перевірка на пустий список та точкову пару.
+  (when (listp lst)
       (remove-thirds-aux lst)))
 REMOVE-THIRDS
 ```
@@ -80,9 +80,7 @@ CL-USER> (defun list-set-union-3-aux (lst)
     (t (cons (car lst) (list-set-union-3-aux (cdr lst))))))
 
 (defun list-set-union-3 (lst1 lst2 lst3)
-  (when (and (listp lst1) (null (cdr (last lst1)))
-             (listp lst2) (null (cdr (last lst2)))
-             (listp lst3) (null (cdr (last lst3))))
+  (when (and (listp lst1) (listp lst2) (listp lst3))
     (list-set-union-3-aux (append lst1 lst2 lst3))))
 
 LIST-SET-UNION-3
