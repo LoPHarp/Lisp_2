@@ -49,22 +49,22 @@ REMOVE-THIRDS
 ```
 ### Тестові набори та утиліти
 ```lisp
-CL-USER> (defun check-my-reverse (name input expected)
-  "Execute `my-reverse' on `input', compare result with `expected' and print comparison status"
+CL-USER> (defun check-my-remove-thirds (name input expected)
+  "Execute `remove-thirds' on `input', compare result with `expected' and print comparison status"
   (format t "~:[FAILED~;passed~] ~a~%"
           (equal (remove-thirds input) expected)
           name))
 
-(defun test-my-reverse ()
-  (check-my-reverse "test 1" '(1 2 3 4 5 6) '(1 2 4 5))
-  (check-my-reverse "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0))
-  (check-my-reverse "test 3" '(1 2) '(1 2))
+(defun test-my-remove-thirds ()
+  (check-my-remove-thirds "test 1" '(1 2 3 4 5 6) '(1 2 4 5))
+  (check-my-remove-thirds "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0))
+  (check-my-remove-thirds "test 3" '(1 2) '(1 2))
   )
-TEST-MY-REVERSE
+TEST-MY-REMOVE-THIRDS
 ```
 ### Тестування
 ```lisp
-CL-USER> (test-my-reverse)
+CL-USER> (test-my-remove-thirds)
 passed test 1
 passed test 2
 passed test 3
@@ -87,23 +87,22 @@ LIST-SET-UNION-3
 ```
 ### Тестові набори та утиліти
 ```lisp
-CL-USER> (defun check-my-reverse (name input1 input2 input3 expected)
-  "Execute `my-reverse' on `input', compare result with `expected' and print comparison status"
+CL-USER> (defun check-my-list-set-union-3 (name input1 input2 input3 expected)
+  "Execute `list-set-union-3' on `input1, input2, input3', compare result with `expected' and print comparison status"
   (format t "~:[FAILED~;passed~] ~a~%"
           (equal (list-set-union-3 input1 input2 input3) expected)
           name))
 
-(defun test-my-reverse ()
-  (check-my-reverse "test 1" '(1 2 3) '(2 3 4) '(4 5 6 7 8) '(1 2 3 4 5 6 7 8))
-  (check-my-reverse "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0) '('|logo| 1 1 1) '('B (NIL) '|logo| 'R 'B '|logo| 42 0 '|logo| 1))
-  (check-my-reverse "test 3" '(1 2) '(1 2) 'a nil)
+(defun test-my-list-set-union-3 ()
+  (check-my-list-set-union-3 "test 1" '(1 2 3) '(2 3 4) '(4 5 6 7 8) '(1 2 3 4 5 6 7 8))
+  (check-my-list-set-union-3 "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0) '('|logo| 1 1 1) '('B (NIL) '|logo| 'R 'B '|logo| 42 0 '|logo| 1))
+  (check-my-list-set-union-3 "test 3" '(1 2) '(1 2) 'a nil)
   )
-
-TEST-MY-REVERSE
+TEST-MY-LIST-SET-UNION-3
 ```
 ### Тестування
 ```lisp
-CL-USER> (test-my-reverse)
+CL-USER> (test-my-list-set-union-3)
 passed test 1
 passed test 2
 passed test 3
