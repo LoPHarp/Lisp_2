@@ -133,7 +133,7 @@ CL-USER> (defun find-element (x lst)
 
 LIST-SET-UNION-3
 ```
-### Тестові набори та утиліти
+### Тестові набори та утиліти (Результат однаковий в обох варіантах)
 ```lisp
 CL-USER> (defun check-my-list-set-union-3 (name input1 input2 input3 expected)
   "Execute `list-set-union-3' on `input1, input2, input3', compare result with `expected' and print comparison status"
