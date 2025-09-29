@@ -71,17 +71,65 @@ passed test 3
 NIL
 ```
 ## Лістинг функції list-set-union-3
+#### №1
 ```lisp
-CL-USER> (defun list-set-union-3-aux (lst)
+CL-USER> (defun chek-third-lst (x lst3)
+  "If the third list is empty, the function returns T; if the third list contains the same element as "X", the function returns NIL."
+  (cond
+    ((null lst3) t)
+    ((eql x (car lst3)) nil)
+    (t (chek-third-lst x (cdr lst3)))))
+
+(defun chek-second-lst (x lst2 lst3)
+  "If either of the two lists is empty, it returns T; if any of the lists contains the same element as "X", the function will return NIL."
+  (cond
+    ((and (null lst2) (null lst3)) t)
+    ((or (eql x (car lst2))  (eql x (car lst3))) nil)
+    (t (chek-second-lst x (cdr lst2) (cdr lst3)))))
+
+(defun chek-first-lst (x lst1 lst2 lst3)
+  "If any of the three lists is empty, it returns T; if any of the lists contains the same element as "X", the function returns NIL."
+  (cond
+    ((and (null lst1) (null lst2) (null lst3)) t)
+    ((or (eql x (car lst1))  (eql x (car lst2))  (eql x (car lst3))) nil)
+    (t (chek-first-lst x (cdr lst1) (cdr lst2) (cdr lst3)))))
+      
+
+(defun list-set-union-3 (lst1 lst2 lst3)
+  "The function creates a new list by checking each element first from lst1 and then from lst2; if a duplicate is found, the element will be skipped."
+  (cond
+    (lst1
+     (if (chek-first-lst (car lst1) (cdr lst1) lst2 lst3)
+         (cons (car lst1) (list-set-union-3 (cdr lst1) lst2 lst3))
+         (list-set-union-3 (cdr lst1) lst2 lst3)))
+    (lst2
+     (if (chek-second-lst (car lst2) (cdr lst2) lst3)
+         (cons (car lst2) (list-set-union-3 lst1 (cdr lst2) lst3))
+         (list-set-union-3 lst1 (cdr lst2) lst3)))
+    (lst3
+     (if (chek-third-lst (car lst3) (cdr lst3))
+         (cons (car lst3) (list-set-union-3 lst1 lst2 (cdr lst3)))
+         (list-set-union-3 lst1 lst2 (cdr lst3))))))
+
+LIST-SET-UNION-3
+```
+#### №2 (більш гарний варіант)
+```lisp
+CL-USER> (defun find-element (x lst)
+  (cond
+    ((null lst) nil) 
+    ((eql x (car lst)) t)
+    (t (find-element x (cdr lst)))))
+
+(defun list-set-union-3-aux (lst)
   (cond
     ((null lst) nil)
-    ((member (car lst) (cdr lst))
-     (list-set-union-3-aux (cdr lst)))
+    ((find-element (car lst) (cdr lst)) (list-set-union-3-aux (cdr lst)))
     (t (cons (car lst) (list-set-union-3-aux (cdr lst))))))
 
 (defun list-set-union-3 (lst1 lst2 lst3)
   (when (and (listp lst1) (listp lst2) (listp lst3))
-    (list-set-union-3-aux (append lst1 lst2 lst3))))
+    (list-set-union-3-aux (append lst1 lst2 (copy-list lst3)))))
 
 LIST-SET-UNION-3
 ```
@@ -96,8 +144,7 @@ CL-USER> (defun check-my-list-set-union-3 (name input1 input2 input3 expected)
 (defun test-my-list-set-union-3 ()
   (check-my-list-set-union-3 "test 1" '(1 2 3) '(2 3 4) '(4 5 6 7 8) '(1 2 3 4 5 6 7 8))
   (check-my-list-set-union-3 "test 2" '(1 'b (nil) '|logo| 42 'r 0) '(1 'b '|logo| 42 0) '('|logo| 1 1 1) '('B (NIL) '|logo| 'R 'B '|logo| 42 0 '|logo| 1))
-  (check-my-list-set-union-3 "test 3" '(1 2) '(1 2) 'a nil)
-  )
+  (check-my-list-set-union-3 "test 3" '(1 2) '(1 2) '(a) '(1 2 a)))
 TEST-MY-LIST-SET-UNION-3
 ```
 ### Тестування
