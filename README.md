@@ -133,7 +133,33 @@ CL-USER> (defun find-element (x lst)
 
 LIST-SET-UNION-3
 ```
-### Тестові набори та утиліти (Результат однаковий в обох варіантах)
+#### №3 (чудовий варіант)
+```list
+CL-USER> (defun find-element (x lst)
+  (cond
+    ((null lst) nil) 
+    ((eql x (car lst)) t)
+    (t (find-element x (cdr lst)))))
+
+(defun aux-lst3 (lst)
+  "Duplicate check in the 3rd list"
+  (cond
+    ((null lst) nil)
+    ((find-element (car lst) (cdr lst)) (aux-lst3 (cdr lst)))
+    (t (cons (car lst) (aux-lst3 (cdr lst))))))
+
+(defun aux (lst1 lst2)
+  (cond
+    ((null lst1) lst2)
+    ((find-element (car lst1) lst2) (aux (cdr lst1) lst2))
+    (t (cons (car lst1) (aux (cdr lst1) lst2)))))
+
+(defun list-set-union-3 (lst1 lst2 lst3)
+  (when (and (listp lst1) (listp lst2) (listp lst3))
+    (aux lst1 (aux lst2 (aux-lst3 lst3)))))
+LIST-SET-UNION-3
+```
+### Тестові набори та утиліти (Результат однаковий в усіх варіантах)
 ```lisp
 CL-USER> (defun check-my-list-set-union-3 (name input1 input2 input3 expected)
   "Execute `list-set-union-3' on `input1, input2, input3', compare result with `expected' and print comparison status"
