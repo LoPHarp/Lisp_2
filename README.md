@@ -135,28 +135,23 @@ LIST-SET-UNION-3
 ```
 #### №3 (чудовий варіант)
 ```lisp
-CL-USER> (defun find-element (x lst)
+(defun find-element (x lst)
   (cond
     ((null lst) nil) 
     ((eql x (car lst)) t)
     (t (find-element x (cdr lst)))))
 
-(defun aux-lst3 (lst)
-  "Duplicate check in the 3rd list"
-  (cond
-    ((null lst) nil)
-    ((find-element (car lst) (cdr lst)) (aux-lst3 (cdr lst)))
-    (t (cons (car lst) (aux-lst3 (cdr lst))))))
-
 (defun aux (lst1 lst2)
   (cond
     ((null lst1) lst2)
-    ((find-element (car lst1) lst2) (aux (cdr lst1) lst2))
+    ((or (find-element (car lst1) (cdr lst1))  
+         (find-element (car lst1) lst2))        
+     (aux (cdr lst1) lst2))
     (t (cons (car lst1) (aux (cdr lst1) lst2)))))
 
 (defun list-set-union-3 (lst1 lst2 lst3)
   (when (and (listp lst1) (listp lst2) (listp lst3))
-    (aux lst1 (aux lst2 (aux-lst3 lst3)))))
+    (aux lst1 (aux lst2 (aux lst3 nil)))))
 LIST-SET-UNION-3
 ```
 ### Тестові набори та утиліти (Результат однаковий в усіх варіантах)
