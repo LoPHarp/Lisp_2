@@ -134,7 +134,7 @@ CL-USER> (defun find-element (x lst)
 LIST-SET-UNION-3
 ```
 #### №3 (чудовий варіант)
-```list
+```lisp
 CL-USER> (defun find-element (x lst)
   (cond
     ((null lst) nil) 
